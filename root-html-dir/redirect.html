@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<!--<meta http-equiv="refresh" content="3;url=http://google.com" /> -->
+<!-- Fix for the "character encoding" error: http://stackoverflow.com/questions/11996257/the-character-encoding-of-the-html-document-was-not-declared -->
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+<title>Redirecting... [Redirector by siliconninja]</title>
+
+<!-- Site icon (v2.1 of app) -->
+<link rel="icon" href="redirector-icon.ico">
+
+<!-- CSS -->
+<style type="text/css">
+
+
+body{
+	/* Font */
+	font-family: Lato, Helvetica, Arial, sans-serif, mono;
+}
+
+/*
+p, h3{
+
+}*/
+
+
+</style>
+
+<!-- Meta tags for thumbnail, title, description, etc. -->
+<!-- Thumbnail, title, description -->
+<!--<meta property="og:image" content="" />
+<meta property="og:title" content="" />
+<meta property="og:description" content="" /> -->
+
+<!-- Sample text in case the image does not work or has not loaded yet. -->
+<!-- <div id="content"> -->
+	<!-- Redirecting text -->
+	<!-- <h2>Redirecting to your requested URL...</h2>
+	<p>&copy; Redirector by <a href="https://github.com/siliconninja">siliconninja</a></p>
+
+	<br>
+	<br> -->
+
+	<!-- App description -->
+	<!-- <h2>App Description</h2>
+	<h3>Redirector</h3>
+	<h4>Educational Tool/Utility</h4>
+	<p>Customize your Google Classroom and Facebook link attachments!</p>
+	<p>Runs on a nice backend server.</p>
+</div> -->
+
+</head>
+
+
+<body>
+
+<div id="additionalContent" style="display: block;">
+
+
+
+</div>
+
+
+
+<!-- [?] Should it include a fallback in case JS does not work? -->
+
+<!-- JS to make it work ;) -->
+
+<!-- jQuery dependency -->
+<!-- http://stackoverflow.com/questions/22268881/referenceerror-is-not-defined -->
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+<script type="text/javascript">
+
+// http://stackoverflow.com/questions/7077770/window-location-href-and-window-open-methods-in-javascript
+var currentURL = window.location.href;
+
+	// Function for URL parameter decoding
+	// Code from http://code-tricks.com/get-url-parameters-using-javascript/
+	function getUrlParameters(parameter, staticURL, decode){
+	   /*
+		Function: getUrlParameters
+		Description: Get the value of URL parameters either from 
+					 current URL or static URL
+		Author: Tirumal
+		URL: www.code-tricks.com
+	   */
+	   var currLocation = (staticURL.length)? staticURL : window.location.search,
+		   parArr = currLocation.split("?")[1].split("&"),
+		   returnBool = true;
+	   
+	   for(var i = 0; i < parArr.length; i++){
+			parr = parArr[i].split("=");
+			if(parr[0] == parameter){
+				returnBool = true;
+				var returnVal = (decode) ? decodeURIComponent(parr[1]) : parr[1];
+				return returnVal;
+				
+			}
+			else{
+				returnBool = false;            
+			}
+	   }
+	   
+	   if(!returnBool){
+			return false;
+	   }
+	}
+
+// Before URL: http://example.com/redirector/google.com/END!/image.jpeg/END!/COOL!END!/Awesome...END!/2END!
+
+// END! and a / denotes the end of a parameter. (END! is a parameter, so it is skipped in the URL encoding/redirection.
+// — It means it will not be included as a parameter in the final/after/sample URL.)
+
+// Sample/after URL: http://example.com/redirect.html?url=google.com/&img=image.jpeg/&title=COOL!&description=Awesome...&timeout=2
+
+// Function usage from: http://code-tricks.com/get-url-parameters-using-javascript/
+var urlParameter = getUrlParameters("url", currentURL.toString(), true);
+var imgParameter = getUrlParameters("img", currentURL.toString(), true);
+var titleParameter = getUrlParameters("title", currentURL.toString(), true);
+var descriptionParameter = getUrlParameters("description", currentURL.toString(), true);
+var timeoutParameter = getUrlParameters("timeout", currentURL.toString(), true);
+
+// Now to set the thumbnail, title, and description... magic time!
+// jQuery code from: http://stackoverflow.com/questions/2568760/is-it-possible-to-use-javascript-to-change-the-meta-tags-of-the-page
+
+// Thumbnail
+// String concatenation FTW!
+
+// Append to HTML's head.
+// Removal not required because we do not have the og:image already set (the fallback).
+
+// You have to put http:// there because the image is otherwise not recognized.
+$('head').append( '<meta property="og:image" content=http://' + imgParameter + ' />' );
+// ... and just in case, set the entire page's image to the specified URL for Google Classroom to recognize it when posting a link.
+
+// Hide entire body sample text
+//document.getElementById("content").style.display = "none";
+
+//document.getElementById("additionalContent").style.display = "block";
+
+// Set the body background image
+// Code from: http://www.w3schools.com/jsref/prop_style_backgroundimage.asp
+// Non-working because the "content" div is hidden
+// COMMENTED OUT THE "content" DIV (for now) and placed it in the head section — REASON: UNNECESSARY, BREAKS CODE
+
+// You have to put http:// there because the image is otherwise not recognized.
+document.body.style.backgroundImage = "url(\'http://" + imgParameter + "\')";
+
+// Don't tile the image: http://www.w3schools.com/cssref/pr_background-repeat.asp
+// "no-repeat" — REMEMBER TO USE QUOTES in order for the code to work.
+// backgroundRepeat, not background-repeat because it's JavaScript, not CSS.
+document.body.style.backgroundRepeat = "no-repeat";
+
+// FIX! Created a new div and set it to display as a block.
+//document.getElementById("additionalContent").background-image = "url('" + imgParameter + "')";
+
+// Title
+// You have to encode spaces to &nbsp; **non-breaking spaces** in order for it to show up in the HTML!
+// **Because the &nbsp; works in HTML, and the %20 works in general URL encoding.**
+// Code from: http://www.w3schools.com/jsref/jsref_replace.asp
+
+$('head').append( '<meta property="og:title" content=' + titleParameter.replace(" ", "&nbsp;") + ' />' );
+// ... and just in case, set the page title too for Google Classroom to recognize it when posting a link.
+
+// Set the page title to the specified title
+// Code from: http://stackoverflow.com/questions/413439/how-to-dynamically-change-a-web-pages-title
+document.title = titleParameter;
+
+// Description
+// You have to encode spaces to &nbsp; **non-breaking spaces** in order for it to show up in the HTML!
+// **Because the &nbsp; works in HTML, and the %20 works in general URL encoding.**
+// Code from: http://www.w3schools.com/jsref/jsref_replace.asp
+
+$('head').append( '<meta property="og:description" content=' + descriptionParameter.replace(" ", "&nbsp;") + ' />' );
+
+// UPDATE 10/24/2015 @ 12:39am:
+// Make this work on Facebook too...
+// FB code from: http://huntcreativegroup.com/creating-a-custom-facebook-thumbnail-image-for-your-website/
+
+// EDIT: These lines cause issues, so don't use them or use them at your own risk!
+
+//$('head').append( '<link rel="image_src" href=http://' + imgParameter + ' />' );
+
+// &nbsp; is required NO MATTER WHAT for FB otherwise the tag formatting will be wrong. It replaces with the same
+// regular spaces anyway, which is intended.
+
+//$('head').append( '<meta name="description" content=' + descriptionParameter.replace(" ", "&nbsp;") + ' />' );
+
+// Now, it's time for the automatic redirect. :D
+// Redirect page with meta code from: http://stackoverflow.com/questions/5411538/redirect-from-an-html-page
+
+// **The real part of this script**
+// **Where it actually does something**
+
+// Place **append** it in the head section...
+// http://stackoverflow.com/questions/5411538/redirect-from-an-html-page
+
+// timeoutParameter is in seconds — it is specified by the user in the URL parameter &timeout= .
+// Ex. &timeout=2 would mean a redirect in 2 seconds.
+
+// (.+) for 1 or more characters
+// http://www.rexegg.com/regex-quickstart.html#quantifiers
+
+// \' to escape a ' in JS
+
+// Remember the URL= after the seconds; in order for the URL to redirect! :D
+// Does capitalizing fix this annoying bug? **Otherwise, it _should_ work fine.**
+// Maybe it doesn't... for security reasons probably?
+//$('head').append( '<meta http-equiv=\"Refresh\" content=\'' + timeoutParameter + ';URL=http://' + urlParameter + '\' />' );
+
+// A workaround with a different StackOverflow answer... but it works.
+// It does work! :D
+setTimeout(function(){location.href="http://" + urlParameter} , timeoutParameter);
+
+// 1st actual test on server — try it out!
+// example.com/redirector/google.com/END!/images.apple.com/v/ipad-pro/c/images/pencil/hero_large.pngEND!/IT WORKSEND!/A websiteEND!/1000END!
+
+
+</script>
+
+</body>
+
+
+</html>

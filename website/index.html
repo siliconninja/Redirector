@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<title>Redirector, a theming tool for links</title>
+				
+		<meta name="generator" content="Bootply" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<!--[if lt IE 9]>
+			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="css/styles.css" rel="stylesheet">
+        
+        <!-- JQuery loaded locally (dependency for Bootstrap) -->
+        <script src="js/jquery-1.11.3.min.js"></script>
+		
+		<!-- Site icon (v2.1 of app) -->
+		<link rel="icon" href="images/redirector-icon.ico">
+		
+		<!-- Meta description and keyword tags -->
+		<meta name="description" content="Create a cool theme for your Google Classroom and Edmodo posts! This simple webapp lets you add custom thumbnails and titles for sharing links online!">
+		<meta name="keywords" content="article, link, sharing, education, social media, customize, thumbnail, teacher, high school, student, homework, english, resource, classroom, management, edmodo, google classroom, newsela, webapp, tool, free, innovative">
+        
+        <!-- Javascript scripts (site interaction/how it works) -->
+		<!-- At the bottom of the body because of the way JS works (does this need to be fixed or is it OK to keep it there for now?) -->
+
+		<!-- NO ^ the top (in the head) works better anyway -->
+
+        <script type="text/javascript">
+		
+		function updateNames(){
+			
+			// Change the image for <img> tags
+			// Source: http://stackoverflow.com/questions/7312553/change-image-source-with-javascript
+			
+			// Modified so the src would actually be changed. (img is the image URL)
+			
+          	// Gets image source from given URL for previewing in thumbnail (no http or https)
+			function changeImage(img) {
+				document.getElementById("image-preview").src = img;
+			}
+			
+			
+			
+			// Text boxes/text fields
+			var redirectURL = document.getElementById("redirect-url-term").value;
+			var imageURL = document.getElementById("image-url-term").value;
+			var title = document.getElementById("title-term").value;
+			var description = document.getElementById("description-term").value;
+			var timeoutMS = document.getElementById("timeout-term").value;
+			
+			// Labels and image boxes
+			var titleLabel = document.getElementById("title-label");
+			var urlLabel = document.getElementById("url-label");
+			var imagePreview = document.getElementById("image-preview");
+			
+			// Set the title, URL, and image source
+			// You need to use innerHTML, not value in order to change the label's text
+			// http://stackoverflow.com/a/32557837
+			titleLabel.innerHTML = title;
+			
+			urlLabel.innerHTML = redirectURL;
+			
+			changeImage(imageURL);
+			
+		}
+		
+		function generateURL(){
+			
+			// Replace all with regex
+			// Source: http://stackoverflow.com/a/6065018
+			
+			// g is the global flag for the Regex (regular expression.)
+			var httpReplacement = new RegExp('http://', 'g');
+			var httpsReplacement = new RegExp('https://', 'g');
+			var encodingReplacement = new RegExp(' ', 'g');
+			
+			
+			// Text boxes/text fields
+			var redirectURL = document.getElementById("redirect-url-term").value.toString();
+			var imageURL = document.getElementById("image-url-term").value.toString();
+			var title = document.getElementById("title-term").value.toString();
+			var description = document.getElementById("description-term").value.toString();
+			var timeoutMS = document.getElementById("timeout-term").value.toString();
+			
+			// Final URL text box
+			var finalURLTextBox = document.getElementById("url-term");
+			
+			// Final URL with all elements in the text boxes
+			var finalURL = "https://example.com/redirect.html?url=" + redirectURL + "&img=" + imageURL + "&title=" + title + "&description=" + description + "&timeout=" + timeoutMS;
+			
+			// Final URL with encoded spaces
+			var finalURLSpaceEncoded = finalURL.replace(encodingReplacement, "%20");
+			
+			// Final URL with encoded spaces and removed all http:// and https:// prefixes
+			var finalURLSpaceEncodedNoHTTP = finalURLSpaceEncoded.replace(httpReplacement, "");
+			var finalURLSpaceEncodedNoHTTPHTTPS = finalURLSpaceEncodedNoHTTP.replace(httpsReplacement, "");
+			
+			// ... and the cleaned URL!
+			var finalURLCleaned = "https://" + finalURLSpaceEncodedNoHTTPHTTPS;
+			
+			// Put/paste it into the text box...
+			finalURLTextBox.value = finalURLCleaned;
+			
+			// Debugging purposes (alert the final cleaned URL)
+			//alert(finalURLCleaned);
+			
+			// Put a compliment in the directions label...
+			
+			// Pick one out from a random assortment...
+			// SOURCE (for the random numbers): http://www.w3schools.com/jsref/jsref_random.asp
+			
+			// In this case, there will be 5 random compliments to choose from!
+			// Nice little feature I decided to add just because I had some time ;)
+			
+			//var randomComplimentNumber = Math.floor(((Math.random() * 5) + 1) - 1);
+			// ^^ I'm putting - 1 at the end because arrays start with 0... wanted to make that step easier beforehand
+			
+			// The compliments as an array...
+			//var complimentStrings = ["That's a great resource!", "Thanks for sharing!", "Incredible post!", "This will be astonishing!", "The next big thing is ready to be shared!"];
+			
+			// Set the label to the random compliment decided by the random number...
+			// Edit: now just "copy and put into Classroom" text for consistency in the directions.
+			document.getElementById("directions-label").innerHTML = "Now, <strong>copy</strong> your link (Right-click or long tap + &quot;Copy&quot;) &amp; <strong>paste</strong> it.";
+			
+			// For debugging purposes, alert the random number...
+			//alert(randomComplimentNumber);
+			
+			// Select text box for iPhone & iPad users so they can share the URL on Classroom or whatever
+			document.getElementById("url-term").select();
+			
+			// ... and done!
+			
+		}
+		
+		</script>
+        
+        
+	</head>
+	<body>
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	
+	<div class="navbar-header">
+	
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		
+		<a class="navbar-brand" rel="home" href="http://example.com/apps/redirector">Redirector</a>
+	</div>
+	
+	<div class="collapse navbar-collapse">
+		
+		<ul class="nav navbar-nav">
+			
+			<!-- Jump to... HTML fragment links -->
+			<li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Jump to <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#details">Post Details</a></li>
+                <li><a href="#preview">Google Classroom Preview</a></li>
+				<li><a href="#create">Create Post</a></li>
+              </ul>
+            </li>
+			
+			<!-- Other apps/resources for school by siliconninja -->
+			<li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Resources <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="https://github.com/siliconninja/TechClub-Curriculum-16-17">Tech Club Curriculum (templates &amp; resources for coding clubs)</a></li>
+				<li><a href="https://github.com/siliconninja/TotalSchoolDays">Total School Days (for counting down to summer break)</a></li>
+                <li><a href="https://github.com/siliconninja/">siliconninja's other projects (for more awesome stuff)</a></li>
+              </ul>
+            </li>
+			
+		</ul>
+		<!--<button type="button" class="btn btn-default navbar-btn">Button</button>-->
+		<div class="col-sm-3 col-md-3 pull-right">
+        <!--<div class="navbar-text">Text</div>
+		<form class="navbar-form" role="search">
+		<div class="input-group">
+			<input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
+			<div class="input-group-btn">
+				<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+			</div>
+		</div>
+		</form>-->
+		</div>
+		
+	</div>
+</div>
+
+
+<div class="container">
+  
+  <div class="text-center">
+  
+    <h1>Redirector v3.0</h1>
+    <p class="lead">Create a cool theme for your Google Classroom posts! Now you can add custom thumbnails and titles!</p>
+	
+	<!-- Post details (post will be themed) -->
+	
+	<h2 id="details"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;Post Details</h2>
+	
+	<br>
+	
+    <!-- You need onKeyUp in order for the label's text to be fully updated -->
+    <!-- http://stackoverflow.com/questions/763745/how-to-get-text-box-value-in-javascript -->
+    
+	<input type="text" class="form-control" placeholder="Resource Title (the title that will be shown on the post)" name="title-term" id="title-term" onKeyUp="updateNames();">
+    
+	<br>
+	
+    <input type="text" class="form-control" placeholder="Image Link (you need to add http:// or https:// in order for the picture to show in the Google Classroom Preview)" name="image-url-term" id="image-url-term" onKeyUp="updateNames();">
+    
+	<br>
+	
+    <input type="text" class="form-control" placeholder="Resource Link (the link the post will jump to)" name="redirect-url-term" id="redirect-url-term" onKeyUp="updateNames();">
+    
+	<br>
+	
+    <input type="text" class="form-control" placeholder="Website Description (useful for other websites that accept meta-tags (e.g. on Edmodo), doesn't work on Google Classroom)" name="description-term" id="description-term" onKeyUp="updateNames();">
+    
+	<br>
+	
+    <input type="text" class="form-control" placeholder="Link Timeout (in milliseconds, type 5500 for a perfect thumbnail, this is the time that it takes to navigate to the link)" name="timeout-term" id="timeout-term" onKeyUp="updateNames();">
+    
+	<br>
+	
+    <!-- The clever "preview" of the Google Classroom thumbnail -->
+	<h2 id="preview"><i class="glyphicon glyphicon-globe"></i>&nbsp;&nbsp;Google Classroom Preview</h2>
+	
+	<br>
+	
+    <img src="images/thumbnail-top.png" width="75%" height="75%" alt="Check it out! I'm now able to post custom thumbnails on my Google Classroom posts!">
+    
+    <br>
+    
+    <!-- Fix for placing image and text in center on one line from http://stackoverflow.com/questions/15209389/wrapping-text-around-an-image-with-indentation-and-justify -->
+    
+    <!-- Placeholder image for when the user of the app hasn't entered an image URL yet -->
+    
+    <!-- TIP: You can use (em recommended now!) % / percent values in text-indent instead of a fixed amount of pixels —
+	it also looks neater that way because of when the total width/height (viewport) of the website in the browser varies. -->
+    
+    <div id="thumbnail_placeholder" style="margin-left:15%;">
+	
+        <img src="images/header-img.png" alt="Can't recognize image link" style="float:left;" width="90" height="75" id="image-preview">
+        
+        <p class="lead" style="text-align:justify; text-indent:0.5em; font-size:1.3em;" id="title-label">Title</p>
+        <p class="lead" style="text-align:justify; text-indent:0.7em; font-size:0.9em; color:#7B7B7B;" id="url-label">http://example.com</p>
+       	
+    </div>
+    
+    <!--<br>-->
+    
+    <img src="images/thumbnail-bottom.png" width="75%" height="75%" alt="Add class comment...">
+	
+	<br><br>
+	
+	<!-- URL generator button -->
+	
+	<h2 id="create"><i class="glyphicon glyphicon-saved"></i>&nbsp;&nbsp;Create Post</h2>
+	
+	<br>
+	
+	<div class="input-group">
+    		
+            <!-- DON'T FORGET TO REPLACE SPACES WITH %20, not &nbsp; because it will be an encoded URL! -->
+            <!-- Readonly URL/non-editable text box: http://stackoverflow.com/questions/3676127/how-do-i-make-a-text-input-non-editable -->
+			<input type="text" class="form-control" placeholder="Output URL" name="url-term" id="url-term" readonly>
+            
+            <!-- Fix for font glyphs: download Bootstrap at http://getbootstrap.com/getting-started/ -->
+            <!-- Unzip it, then copy the fonts folder to your working website directory. -->
+            
+            <!-- Solution from http://stackoverflow.com/questions/18245575/bootstrap-3-unable-to-display-glyphicon-properly -->
+            
+			<div class="input-group-btn">
+				<button class="btn btn-default" type="submit" onClick="generateURL();"><i class="glyphicon glyphicon-cog"></i> Generate URL</button>
+			</div>
+            
+	</div>
+	
+	<br>
+	
+	<p class="lead" id="directions-label">Click <strong>Generate URL</strong> to create your custom post!</p>
+	
+	<br>
+  
+	<!-- Update info -->
+	
+	<!-- <p>What's new in Version 2.1:</p>
+	
+	<ul style="margin-right:3%;">
+		<li>Design/UI improvements</li>
+		<li>Images are now easier to see</li>
+	</ul>
+  
+	<br>
+  
+	<p>What's new in Version 2.0:</p>
+	
+	<ul style="margin-right:3%;">
+		<li>More reliable URL handling</li>
+		<li>Improved server reliability</li>
+	</ul> -->
+  
+  <!-- Credits -->
+  
+  <h4>Created by <a href="https://github.com/siliconninja">siliconninja</a></h4>
+  
+  <h4><a href="https://github.com/siliconninja/Redirector">Source Code</a></h4>
+  
+  <p>Another useful tool for school: <a href="https://github.com/siliconninja/TotalSchoolDays">Total School Days</a></p>
+  
+  <p>Bootstrap template from <a href="http://www.bootstrapzero.com/bootstrap-template/complex-navbar">Bootply</a>. Library and template used under the MIT license.</p>
+  
+  </div>
+  
+</div><!-- /.container -->
+
+	<!-- script references -->
+		<script src="js/bootstrap.min.js"></script>
+	</body>
+</html>

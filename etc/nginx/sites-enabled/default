@@ -1,0 +1,34 @@
+# Redirector NGINX configuration — redirects Redirector URLs to the HTML file, parses them, and redirects them to a specified webpage.
+# Created by siliconninja. License: CC-BY-NC-SA 4.0.
+
+# Default server settings
+server {
+		set $server_ipaddr ""; # set your server's IP address here
+		set $rd_domain_name ""; # set your server's domain name here (no HTTP or HTTPS or ://)
+		listen 80 default_server;
+		server_name $server_ipaddr;
+		
+		# Redirector app
+        set $redir_var "";
+        if ($host = $rd_domain_name) { # if matches redirector domain
+            return 301 https://$host$request_uri; # return HTTPS SSL URL
+        }
+}
+
+# Domain SSL configuration...
+
+# Redirector's redirection configuration
+server {
+		set $server_ipaddr ""; # set your server's IP address here
+		set $rd_domain_name ""; # set your server's domain name here (no HTTP or HTTPS or ://)
+		
+		server_name $server_ipaddr;
+
+        rewrite (.*)(\:\/\/)$rd_domain_name/redirector(?=)(.*)(\:\/\/)(.*)(&)thumbnail_url=(.*)(\:\/\/)(.*) https://$rd_domain_name/redirect.html permanent;
+		
+		# Old method for redirection (pre-2.0)
+        #location /redirector/ {
+                #rewrite \/redirector\/(.+)(END!)\/(.+)(END!)\/(.+)(END!)\/(.+)(END!)\/(.+)(END!) https://example.com/redirect.html?url=$1&img=$3&title=$5&description=$7&timeout=$9 permanent;
+        #}
+
+}

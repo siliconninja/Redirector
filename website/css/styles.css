@@ -1,0 +1,17 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,700);
+
+body, h1, h2, h3, h4, h5, h6, p {
+	font-family: "Roboto", "Lato", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+}
+
+body {
+	padding-top: 50px;
+}
+
+/*.collapse navbar-collapse {
+	display: block !important;
+}*/
+
+/*ul{
+	text-align: center;
+}*/
